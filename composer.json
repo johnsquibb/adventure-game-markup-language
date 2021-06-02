@@ -1,0 +1,22 @@
+{
+  "name": "johnsquibb/adventure-game-markup-language",
+  "type": "project",
+  "description": "A parser for adventure-game-framework files",
+  "license": "MIT",
+  "require-dev": {
+    "phpunit/phpunit": "^8"
+  },
+  "autoload": {
+    "psr-4": {
+      "AdventureGameMarkupLanguage\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AdventureGameMarkupLanguage\\Test\\": "test/"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit test"
+  }
+}
