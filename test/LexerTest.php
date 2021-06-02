@@ -119,9 +119,15 @@ class LexerTest extends TestCase
     {
         $fixture = <<<END
         [ITEM]
+        # Attributes
         id=flashlight
         size =2
         readable = yes
+        
+        # Interactions
+        acquirable=true
+        activatable=true
+        deactivatable=true
         END;
 
         $expected = [
@@ -129,8 +135,22 @@ class LexerTest extends TestCase
             Symbols::IDENTIFIER,
             Symbols::RIGHT_BRACKET,
 
+            Symbols::HASH,
+            Symbols::IDENTIFIER,
+
             Symbols::IDENTIFIER,
             Symbols::EQUALS,
+            Symbols::IDENTIFIER,
+
+            Symbols::IDENTIFIER,
+            Symbols::EQUALS,
+            Symbols::IDENTIFIER,
+
+            Symbols::IDENTIFIER,
+            Symbols::EQUALS,
+            Symbols::IDENTIFIER,
+
+            Symbols::HASH,
             Symbols::IDENTIFIER,
 
             Symbols::IDENTIFIER,
@@ -141,6 +161,9 @@ class LexerTest extends TestCase
             Symbols::EQUALS,
             Symbols::IDENTIFIER,
 
+            Symbols::IDENTIFIER,
+            Symbols::EQUALS,
+            Symbols::IDENTIFIER,
         ];
 
         $lexer = new Lexer();
