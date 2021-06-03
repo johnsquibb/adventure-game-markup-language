@@ -4,5 +4,4 @@ namespace AdventureGameMarkupLanguage;
 
 class Parser
 {
-
 }

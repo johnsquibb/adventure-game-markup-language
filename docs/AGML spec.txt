@@ -94,9 +94,8 @@ phrases=first switch		# phrases will be appended to [PHRASES] list and will be a
 [description]
 A battery powered flashlight.
 
-[lines]
+[text]
 There is some information written on the side of the flashlight:
-
 Model: Illuminated Devices Inc
 Year: 1983
 Serial Number: 8301IDI001256703
