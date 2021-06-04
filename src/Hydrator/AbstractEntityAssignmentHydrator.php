@@ -80,7 +80,7 @@ abstract class AbstractEntityAssignmentHydrator implements AssignmentHydratorInt
                 $this->revealed = $this->boolValue($values);
                 break;
             case 'tags':
-                $this->tags = $values;
+                $this->tags = $this->joinListValues($values);
                 break;
             case 'description':
                 $this->description = $this->joinLines($values);
@@ -228,7 +228,7 @@ abstract class AbstractEntityAssignmentHydrator implements AssignmentHydratorInt
     }
 
     /**
-     * Get the first value from list.
+     * Get the first value.
      * @param array $values
      * @return string
      */
@@ -238,7 +238,7 @@ abstract class AbstractEntityAssignmentHydrator implements AssignmentHydratorInt
     }
 
     /**
-     * Get the first value as boolean from list.
+     * Get the first value as boolean.
      * @param array $values
      * @return bool
      */
@@ -248,7 +248,7 @@ abstract class AbstractEntityAssignmentHydrator implements AssignmentHydratorInt
     }
 
     /**
-     * Get the first value as integer from list.
+     * Get the first value as integer.
      * @param array $values
      * @return int
      */
@@ -258,13 +258,33 @@ abstract class AbstractEntityAssignmentHydrator implements AssignmentHydratorInt
     }
 
     /**
-     * Join list of values into single string.
+     * Join values into single string.
      * @param array $values
      * @return string
      */
     protected function joinValues(array $values): string
     {
         return implode(' ', $values);
+    }
+
+    /**
+     * Join list values into strings.
+     * @param array $values
+     * @return array
+     */
+    protected function joinListValues(array $values): array
+    {
+        $joined = [];
+
+        foreach ($values as $value) {
+            if (is_array($value)) {
+                $joined[] = implode(' ', $value);
+            } else {
+                $joined[] = $value;
+            }
+        }
+
+        return $joined;
     }
 
     /**

@@ -60,8 +60,6 @@ class Parser
 
                 $hydrators[] = $hydrator;
             }
-
-            $index++;
         }
 
         return $hydrators;
