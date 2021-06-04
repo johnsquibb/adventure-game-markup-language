@@ -8,6 +8,10 @@ namespace AdventureGameMarkupLanguage;
  */
 final class Literals
 {
-    public const LITERAL_TRUE = 'yes';
-    public const LITERAL_FALSE = 'no';
+    public const BOOL_TRUE = 'yes';
+    public const BOOL_FALSE = 'no';
+
+    public const TYPE_ITEM = 'ITEM';
+    public const TYPE_LOCATION = 'LOCATION';
+    public const TYPE_CONTAINER = 'CONTAINER';
 }

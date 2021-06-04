@@ -31,6 +31,7 @@ Special Characters      To use AGML reserved characters in text escape them with
                                 \[
                                 \]
                                 \=
+                                \\ (escape literal)
 
 ----------------------------------------------------------------------------------------------------
 
