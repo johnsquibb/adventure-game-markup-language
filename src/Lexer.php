@@ -85,24 +85,13 @@ class Lexer
      */
     public function createSyntaxTree(array $tokens): SyntaxTree
     {
+        $tokens = $this->preprocessTokens($tokens);
+
         $tree = new SyntaxTree();
 
         $index = 0;
         while ($index < count($tokens)) {
             switch ($tokens[$index]) {
-                case Symbols::ESCAPE:
-                    // Convert to identifier.
-                    $tokens[$index] = Symbols::IDENTIFIER;
-                    $literal = match ($tokens[$index + 1]) {
-                        Symbols::HASH => AbstractSyntax::TOKEN_COMMENT,
-                        Symbols::EQUALS => AbstractSyntax::TOKEN_ASSIGNMENT,
-                        Symbols::LEFT_BRACKET => AbstractSyntax::TOKEN_TYPE_OPEN,
-                        Symbols::RIGHT_BRACKET => AbstractSyntax::TOKEN_TYPE_CLOSE,
-                        Symbols::COMMA => AbstractSyntax::TOKEN_DELIMITER,
-                        Symbols::ESCAPE => AbstractSyntax::TOKEN_ESCAPE,
-                    };
-                    $tokens[$index + 1] = $literal;
-                    break;
                 case Symbols::IDENTIFIER:
                     $index++;
                     $identifier = $tokens[$index];
@@ -210,6 +199,34 @@ class Lexer
         }
 
         return $tree;
+    }
+
+    private function preprocessTokens(array $tokens): array
+    {
+        $index = 0;
+        while ($index < count($tokens)) {
+            switch ($tokens[$index]) {
+                case Symbols::ESCAPE:
+                    $literal = match ($tokens[$index + 1]) {
+                        Symbols::HASH => AbstractSyntax::TOKEN_COMMENT,
+                        Symbols::EQUALS => AbstractSyntax::TOKEN_ASSIGNMENT,
+                        Symbols::LEFT_BRACKET => AbstractSyntax::TOKEN_TYPE_OPEN,
+                        Symbols::RIGHT_BRACKET => AbstractSyntax::TOKEN_TYPE_CLOSE,
+                        Symbols::COMMA => AbstractSyntax::TOKEN_DELIMITER,
+                        Symbols::ESCAPE => AbstractSyntax::TOKEN_ESCAPE,
+                    };
+
+                    // Convert the current token to its own identifier.
+                    $tokens[$index] = Symbols::IDENTIFIER;
+                    $tokens[$index + 1] = $literal;
+
+                    break;
+                default:
+                    $index++;
+            }
+        }
+
+        return $tokens;
     }
 
     /**
