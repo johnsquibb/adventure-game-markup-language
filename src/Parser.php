@@ -3,8 +3,11 @@
 namespace AdventureGameMarkupLanguage;
 
 use AdventureGameMarkupLanguage\Exception\InvalidTypeException;
-use AdventureGameMarkupLanguage\Hydrator\HydratorInterface;
-use AdventureGameMarkupLanguage\Hydrator\ItemHydrator;
+use AdventureGameMarkupLanguage\Hydrator\AssignmentHydratorInterface;
+use AdventureGameMarkupLanguage\Hydrator\ContainerEntityHydrator;
+use AdventureGameMarkupLanguage\Hydrator\ItemEntityHydrator;
+use AdventureGameMarkupLanguage\Hydrator\LocationEntityHydrator;
+use AdventureGameMarkupLanguage\Hydrator\PortalEntityHydrator;
 use AdventureGameMarkupLanguage\Syntax\Assignment;
 use AdventureGameMarkupLanguage\Syntax\ListAssignment;
 use AdventureGameMarkupLanguage\Syntax\MultilineAssignment;
@@ -67,36 +70,39 @@ class Parser
     /**
      * Parse type into Hydrator.
      * @param Type $type
-     * @return HydratorInterface
+     * @return AssignmentHydratorInterface
      * @throws InvalidTypeException
      */
-    private function parseType(Type $type): HydratorInterface
+    private function parseType(Type $type): AssignmentHydratorInterface
     {
         $identifier = $type->getIdentifier();
 
         return match ($identifier) {
-            Literals::TYPE_ITEM => new ItemHydrator(),
+            Literals::TYPE_ITEM => new ItemEntityHydrator(),
+            Literals::TYPE_PORTAL => new PortalEntityHydrator(),
+            Literals::TYPE_CONTAINER => new ContainerEntityHydrator(),
+            Literals::TYPE_LOCATION => new LocationEntityHydrator(),
             default => throw new InvalidTypeException("Invalid type: $identifier"),
         };
     }
 
     /**
      * Parse assignment.
-     * @param HydratorInterface $hydrator
+     * @param AssignmentHydratorInterface $hydrator
      * @param Assignment $assignment
      */
-    private function parseAssignment(HydratorInterface $hydrator, Assignment $assignment): void
+    private function parseAssignment(AssignmentHydratorInterface $hydrator, Assignment $assignment): void
     {
         $hydrator->assign($assignment->getVariable(), $assignment->getValues());
     }
 
     /**
      * Parse list assignment.
-     * @param HydratorInterface $hydrator
+     * @param AssignmentHydratorInterface $hydrator
      * @param ListAssignment $assignment
      */
     private function parseListAssignment(
-        HydratorInterface $hydrator,
+        AssignmentHydratorInterface $hydrator,
         ListAssignment $assignment
     ): void {
         $hydrator->assign($assignment->getVariable(), $assignment->getValues());
@@ -104,11 +110,11 @@ class Parser
 
     /**
      * Parse multi-line assignment.
-     * @param HydratorInterface $hydrator
+     * @param AssignmentHydratorInterface $hydrator
      * @param MultilineAssignment $assignment
      */
     private function parseMultilineAssignment(
-        HydratorInterface $hydrator,
+        AssignmentHydratorInterface $hydrator,
         MultilineAssignment $assignment
     ): void {
         $hydrator->assign($assignment->getSection(), $assignment->getLines());

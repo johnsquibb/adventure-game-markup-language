@@ -81,6 +81,9 @@ first switch=switch.one
 second switch=switch.two
 third switch=switch.three
 
+[GAME]
+spawn=spawnRoom
+
 [ITEM]
 id=flashlight
 size=2
@@ -123,7 +126,7 @@ direction=west
 tags=door
 destination=roomWestOfSpawn
 mutable=true
-locked-true
+locked=true
 key=keyToWoodenDoor
 
 [description]
