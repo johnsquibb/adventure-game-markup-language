@@ -27,7 +27,7 @@ class AssignmentTest extends TestCase
     public function testToString()
     {
         $variable = 'name';
-        $values = ['John', 'the', 'Carpenter'];
+        $values = ['John', ' ', 'the', ' ', 'Carpenter'];
         $assignment = new Assignment($variable, $values);
 
         $this->assertEquals('name=John the Carpenter', $assignment->toString());

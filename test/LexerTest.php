@@ -48,7 +48,17 @@ class LexerTest extends TestCase
 
         $sequence = 'a b c';
         $lexemes = $lexer->scan($sequence);
-        $this->assertEquals(['a', 'b', 'c', AbstractSyntax::TOKEN_NEWLINE], $lexemes);
+        $this->assertEquals(
+            [
+                'a',
+                AbstractSyntax::TOKEN_SPACE,
+                'b',
+                AbstractSyntax::TOKEN_SPACE,
+                'c',
+                AbstractSyntax::TOKEN_NEWLINE
+            ],
+            $lexemes
+        );
 
         $sequence = 'a=b';
         $lexemes = $lexer->scan($sequence);
@@ -56,23 +66,65 @@ class LexerTest extends TestCase
 
         $sequence = 'a = b';
         $lexemes = $lexer->scan($sequence);
-        $this->assertEquals(['a', '=', 'b', AbstractSyntax::TOKEN_NEWLINE], $lexemes);
+        $this->assertEquals(
+            [
+                'a',
+                AbstractSyntax::TOKEN_SPACE,
+                '=',
+                AbstractSyntax::TOKEN_SPACE,
+                'b',
+                AbstractSyntax::TOKEN_NEWLINE
+            ],
+            $lexemes
+        );
 
         $sequence = '[TYPE] a=b c=3';
         $lexemes = $lexer->scan($sequence);
         $this->assertEquals(
-            ['[', 'TYPE', ']', 'a', '=', 'b', 'c', '=', '3', AbstractSyntax::TOKEN_NEWLINE],
+            [
+                '[',
+                'TYPE',
+                ']',
+                AbstractSyntax::TOKEN_SPACE,
+                'a',
+                '=',
+                'b',
+                AbstractSyntax::TOKEN_SPACE,
+                'c',
+                '=',
+                '3',
+                AbstractSyntax::TOKEN_NEWLINE
+            ],
             $lexemes
         );
 
         $sequence = '# comment format';
         $lexemes = $lexer->scan($sequence);
-        $this->assertEquals(['#', 'comment', 'format', AbstractSyntax::TOKEN_NEWLINE], $lexemes);
+        $this->assertEquals(
+            [
+                '#',
+                AbstractSyntax::TOKEN_SPACE,
+                'comment',
+                AbstractSyntax::TOKEN_SPACE,
+                'format',
+                AbstractSyntax::TOKEN_NEWLINE
+            ],
+            $lexemes
+        );
 
         $sequence = 'comma, separated, values';
         $lexemes = $lexer->scan($sequence);
         $this->assertEquals(
-            ['comma', ',', 'separated', ',', 'values', AbstractSyntax::TOKEN_NEWLINE],
+            [
+                'comma',
+                ',',
+                AbstractSyntax::TOKEN_SPACE,
+                'separated',
+                ',',
+                AbstractSyntax::TOKEN_SPACE,
+                'values',
+                AbstractSyntax::TOKEN_NEWLINE
+            ],
             $lexemes
         );
 
@@ -80,6 +132,63 @@ class LexerTest extends TestCase
         $lexemes = $lexer->scan($sequence);
         $this->assertEquals(
             ['\\', '[', 'TYPE', '\\', ']', AbstractSyntax::TOKEN_NEWLINE],
+            $lexemes
+        );
+
+        $sequence = 'name=\[TYPE\]';
+        $lexemes = $lexer->scan($sequence);
+        $this->assertEquals(
+            ['name', '=', '\\', '[', 'TYPE', '\\', ']', AbstractSyntax::TOKEN_NEWLINE],
+            $lexemes
+        );
+
+        $sequence = 'name=\#string \#with\# pounds\#';
+        $lexemes = $lexer->scan($sequence);
+
+        $this->assertEquals(
+            [
+                'name',
+                '=',
+                '\\',
+                '#',
+                'string',
+                AbstractSyntax::TOKEN_SPACE,
+                '\\',
+                '#',
+                'with',
+                '\\',
+                '#',
+                AbstractSyntax::TOKEN_SPACE,
+                'pounds',
+                '\\',
+                '#',
+                AbstractSyntax::TOKEN_NEWLINE
+            ],
+            $lexemes
+        );
+    }
+
+    public function testEvaluateSpaces()
+    {
+        $lexer = new Lexer();
+
+        // Two spaces surround each word.
+        $sequence = '  string  with  extra  space  ';
+        $lexemes = $lexer->scan($sequence);
+        $this->assertEquals(
+            [
+                'string',
+                AbstractSyntax::TOKEN_SPACE,
+                AbstractSyntax::TOKEN_SPACE,
+                'with',
+                AbstractSyntax::TOKEN_SPACE,
+                AbstractSyntax::TOKEN_SPACE,
+                'extra',
+                AbstractSyntax::TOKEN_SPACE,
+                AbstractSyntax::TOKEN_SPACE,
+                'space',
+                AbstractSyntax::TOKEN_NEWLINE
+            ],
             $lexemes
         );
     }
@@ -205,6 +314,7 @@ class LexerTest extends TestCase
 
             // # Attributes
             Symbols::HASH,
+            Symbols::SPACE,
             Symbols::IDENTIFIER,
             'Attributes',
             Symbols::NEWLINE,
@@ -220,6 +330,7 @@ class LexerTest extends TestCase
             // size =2
             Symbols::IDENTIFIER,
             'size',
+            Symbols::SPACE,
             Symbols::EQUALS,
             Symbols::IDENTIFIER,
             '2',
@@ -228,7 +339,9 @@ class LexerTest extends TestCase
             // readable = yes
             Symbols::IDENTIFIER,
             'readable',
+            Symbols::SPACE,
             Symbols::EQUALS,
+            Symbols::SPACE,
             Symbols::IDENTIFIER,
             'yes',
             Symbols::NEWLINE,
@@ -236,9 +349,12 @@ class LexerTest extends TestCase
             // name = John Smith
             Symbols::IDENTIFIER,
             'name',
+            Symbols::SPACE,
             Symbols::EQUALS,
+            Symbols::SPACE,
             Symbols::IDENTIFIER,
             'John',
+            Symbols::SPACE,
             Symbols::IDENTIFIER,
             'Smith',
             Symbols::NEWLINE,
@@ -248,6 +364,7 @@ class LexerTest extends TestCase
 
             // # Interactions
             Symbols::HASH,
+            Symbols::SPACE,
             Symbols::IDENTIFIER,
             'Interactions',
             Symbols::NEWLINE,
@@ -281,6 +398,7 @@ class LexerTest extends TestCase
 
             // # Tags
             Symbols::HASH,
+            Symbols::SPACE,
             Symbols::IDENTIFIER,
             'Tags',
             Symbols::NEWLINE,
@@ -297,8 +415,10 @@ class LexerTest extends TestCase
             Symbols::COMMA,
             Symbols::IDENTIFIER,
             'magic',
+            Symbols::SPACE,
             Symbols::IDENTIFIER,
             'torch',
+            Symbols::SPACE,
             Symbols::IDENTIFIER,
             'stick',
             Symbols::NEWLINE,
@@ -501,9 +621,15 @@ class LexerTest extends TestCase
 
     public function testCreateSyntaxTreeFromMultilineAssignment()
     {
-        $lexer = new Lexer();
+        $fixture = <<<END
+        [description]
+        This is a description.
+        It spans multiple lines.
+        This  line  has  double  spacing.
+        END;
+        $fixture = preg_replace("/\r\n/", "\n", $fixture);
 
-        $tokens = [
+        $expected = [
             // [description]
             Symbols::LEFT_BRACKET,
             Symbols::IDENTIFIER,
@@ -514,10 +640,13 @@ class LexerTest extends TestCase
             // This is a description.
             Symbols::IDENTIFIER,
             'This',
+            Symbols::SPACE,
             Symbols::IDENTIFIER,
             'is',
+            Symbols::SPACE,
             Symbols::IDENTIFIER,
             'a',
+            Symbols::SPACE,
             Symbols::IDENTIFIER,
             'description.',
             Symbols::NEWLINE,
@@ -525,14 +654,43 @@ class LexerTest extends TestCase
             // It spans multiple lines.
             Symbols::IDENTIFIER,
             'It',
+            Symbols::SPACE,
             Symbols::IDENTIFIER,
             'spans',
+            Symbols::SPACE,
             Symbols::IDENTIFIER,
             'multiple',
+            Symbols::SPACE,
             Symbols::IDENTIFIER,
             'lines.',
             Symbols::NEWLINE,
+
+            // This  line  has  double  spacing.
+            Symbols::IDENTIFIER,
+            'This',
+            Symbols::SPACE,
+            Symbols::SPACE,
+            Symbols::IDENTIFIER,
+            'line',
+            Symbols::SPACE,
+            Symbols::SPACE,
+            Symbols::IDENTIFIER,
+            'has',
+            Symbols::SPACE,
+            Symbols::SPACE,
+            Symbols::IDENTIFIER,
+            'double',
+            Symbols::SPACE,
+            Symbols::SPACE,
+            Symbols::IDENTIFIER,
+            'spacing.',
+            Symbols::NEWLINE,
         ];
+
+        $lexer = new Lexer();
+        $tokens = $lexer->tokenize($fixture);
+
+        $this->assertEquals($expected, $tokens);
 
         $tree = $lexer->createSyntaxTree($tokens);
         $nodes = $tree->getNodes();
@@ -542,9 +700,29 @@ class LexerTest extends TestCase
         $this->assertEquals('description', $nodes[0]->getSection());
 
         $lines = $nodes[0]->getLines();
-        $this->assertCount(2, $lines);
-        $this->assertEquals(['This', 'is', 'a', 'description.'], $lines[0]);
-        $this->assertEquals(['It', 'spans', 'multiple', 'lines.'], $lines[1]);
+        $this->assertCount(3, $lines);
+        $this->assertEquals(['This', ' ', 'is', ' ', 'a', ' ', 'description.'], $lines[0]);
+        $this->assertEquals(['It', ' ', 'spans', ' ', 'multiple', ' ', 'lines.'], $lines[1]);
+        $this->assertEquals(
+            [
+                'This',
+                ' ',
+                ' ',
+                'line',
+                ' ',
+                ' ',
+                'has',
+                ' ',
+                ' ',
+                'double',
+                ' ',
+                ' ',
+                'spacing.',
+            ],
+            $lines[2]
+        );
+
+        $this->assertEquals($fixture, $nodes[0]->toString());
     }
 
     public function testCreateSyntaxTreeFromAssignment()

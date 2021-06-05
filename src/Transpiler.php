@@ -2,6 +2,10 @@
 
 namespace AdventureGameMarkupLanguage;
 
+/**
+ * Class Transpiler processes AML text into hydrator objects using the lexer and parser.
+ * @package AdventureGameMarkupLanguage
+ */
 class Transpiler
 {
     public function __construct(private Lexer $lexer, private Parser $parser)

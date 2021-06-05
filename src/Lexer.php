@@ -50,7 +50,7 @@ class Lexer
             array_push(
                 $lexemes,
                 ...preg_split(
-                    "/(\\\)|(,)|(#)|(\[)|(])|(=)|\s+/",
+                    "/(\\\)|(,)|(#)|(\[)|(])|(=)|(\s)/",
                     trim($line),
                     -1,
                     PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY
@@ -201,8 +201,15 @@ class Lexer
         return $tree;
     }
 
+    /**
+     * Preprocess tokens to deal with escape characters, spaces.
+     * @param array $tokens
+     * @return array
+     */
     private function preprocessTokens(array $tokens): array
     {
+        $tokens = $this->convertSpacesToIdentifiers($tokens);
+
         $index = 0;
         while ($index < count($tokens)) {
             switch ($tokens[$index]) {
@@ -230,6 +237,32 @@ class Lexer
     }
 
     /**
+     * Convert preserved whitespace to string identifiers.
+     * @param array $tokens
+     * @return array
+     */
+    private function convertSpacesToIdentifiers(array $tokens): array
+    {
+        $converted = [];
+
+        $index = 0;
+        while ($index < count($tokens)) {
+            switch ($tokens[$index]) {
+                case Symbols::SPACE:
+                    $converted[] = Symbols::IDENTIFIER;
+                    $converted[] = AbstractSyntax::TOKEN_SPACE;
+                    break;
+                default:
+                    $converted[] = $tokens[$index];
+                    break;
+            }
+            $index++;
+        }
+
+        return $converted;
+    }
+
+    /**
      * Peek at the token.
      * @param int $index
      * @param array $tokens
@@ -252,6 +285,7 @@ class Lexer
     private function analyzeLexeme(string $lexeme): array
     {
         return match ($lexeme) {
+            AbstractSyntax::TOKEN_SPACE => [Symbols::SPACE],
             AbstractSyntax::TOKEN_ESCAPE => [Symbols::ESCAPE],
             AbstractSyntax::TOKEN_DELIMITER => [Symbols::COMMA],
             AbstractSyntax::TOKEN_COMMENT => [Symbols::HASH],

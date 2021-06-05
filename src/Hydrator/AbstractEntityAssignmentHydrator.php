@@ -264,7 +264,7 @@ abstract class AbstractEntityAssignmentHydrator implements AssignmentHydratorInt
      */
     protected function joinValues(array $values): string
     {
-        return implode(' ', $values);
+        return implode('', $values);
     }
 
     /**
@@ -278,7 +278,7 @@ abstract class AbstractEntityAssignmentHydrator implements AssignmentHydratorInt
 
         foreach ($values as $value) {
             if (is_array($value)) {
-                $joined[] = implode(' ', $value);
+                $joined[] = implode('', $value);
             } else {
                 $joined[] = $value;
             }

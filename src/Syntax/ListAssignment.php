@@ -25,7 +25,7 @@ class ListAssignment extends Assignment
 
         foreach ($this->getValues() as $value) {
             if (is_array($value)) {
-                $merged[] = implode(' ', $value);
+                $merged[] = implode('', $value);
             } else {
                 $merged[] = $value;
             }

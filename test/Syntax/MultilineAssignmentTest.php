@@ -26,8 +26,8 @@ class MultilineAssignmentTest extends TestCase
     {
         $section = 'description';
         $lines = [
-            ['The', 'flashlight', 'is', 'black'],
-            ['It', 'is', 'made', 'of', 'metal'],
+            ['The', ' ', 'flashlight', ' ', 'is', ' ', 'black'],
+            ['It', ' ', 'is', ' ', 'made', ' ', 'of', ' ', 'metal'],
         ];
         $assignment = new MultilineAssignment($section, $lines);
 

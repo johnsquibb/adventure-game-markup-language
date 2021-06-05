@@ -22,6 +22,6 @@ class Comment extends AbstractSyntax
         $parts = $this->identifiers;
         array_unshift($parts, self::TOKEN_COMMENT);
 
-        return implode(' ', $parts);
+        return implode('', $parts);
     }
 }

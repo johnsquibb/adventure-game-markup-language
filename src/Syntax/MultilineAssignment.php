@@ -38,7 +38,7 @@ class MultilineAssignment extends AbstractSyntax
         $lines[] = implode('', $section);
 
         foreach ($this->getLines() as $line) {
-            $lines[] = implode(' ', $line);
+            $lines[] = implode('', $line);
         }
 
         return implode("\n", $lines);

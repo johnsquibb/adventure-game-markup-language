@@ -16,4 +16,5 @@ final class Symbols
     public const COMMA = 'COMMA';
     public const ESCAPE = 'ESCAPE';
     public const NEWLINE = 'NEWLINE';
+    public const SPACE = 'SPACE';
 }

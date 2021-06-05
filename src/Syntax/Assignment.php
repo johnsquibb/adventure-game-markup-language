@@ -24,7 +24,7 @@ class Assignment extends AbstractSyntax
 
     public function toString(): string
     {
-        $value = implode(' ', $this->values);
+        $value = implode('', $this->values);
         $parts = [$this->variable, self::TOKEN_ASSIGNMENT, $value];
         return implode('', $parts);
     }
