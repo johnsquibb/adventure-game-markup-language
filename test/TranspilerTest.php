@@ -36,8 +36,8 @@ class TranspilerTest extends TestCase
         Information written on the side:
         Model: Illuminated Devices Inc
         Year: 1983
-        Serial Number: 8301IDI001256703
-        Batt. Type: (4) AA
+        Serial Number: \#8301IDI001256703\\\B
+        Batt. Type: (4) \[AA\]\,    Rechargeable\=yes
         
         [ITEM]
         # Attributes
@@ -82,7 +82,8 @@ class TranspilerTest extends TestCase
         $this->assertInstanceOf(ItemEntityHydrator::class, $hydrators[0]);
         $this->assertEquals('flashlight', $hydrators[0]->getId());
         $this->assertCount(6, $hydrators[0]->getText());
-        $this->assertEquals("Serial Number: 8301IDI001256703", $hydrators[0]->getText()[3]);
+        $this->assertEquals("Serial Number: #8301IDI001256703\\B", $hydrators[0]->getText()[3]);
+        $this->assertEquals("Batt. Type: (4) [AA],    Rechargeable=yes", $hydrators[0]->getText()[4]);
 
         $this->assertInstanceOf(ItemEntityHydrator::class, $hydrators[1]);
         $this->assertEquals('keyToWoodenDoor', $hydrators[1]->getId());
