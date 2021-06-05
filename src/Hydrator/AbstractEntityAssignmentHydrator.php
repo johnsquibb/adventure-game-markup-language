@@ -112,121 +112,6 @@ abstract class AbstractEntityAssignmentHydrator implements AssignmentHydratorInt
         }
     }
 
-    public function getItems(): array
-    {
-        return $this->items;
-    }
-
-    public function getExits(): array
-    {
-        return $this->exits;
-    }
-
-    public function getDestination(): string
-    {
-        return $this->destination;
-    }
-
-    public function getDirection(): string
-    {
-        return $this->direction;
-    }
-
-    public function getKey(): string
-    {
-        return $this->key;
-    }
-
-    public function getCapacity(): int
-    {
-        return $this->capacity;
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getSize(): int
-    {
-        return $this->size;
-    }
-
-    public function getReadable(): bool
-    {
-        return $this->readable;
-    }
-
-    public function getActivatable(): bool
-    {
-        return $this->activatable;
-    }
-
-    public function getAccessible(): bool
-    {
-        return $this->accessible;
-    }
-
-    public function getAcquirable(): bool
-    {
-        return $this->acquirable;
-    }
-
-    public function getDeactivatable(): bool
-    {
-        return $this->deactivatable;
-    }
-
-    public function getDiscoverable(): bool
-    {
-        return $this->discoverable;
-    }
-
-    public function getMutable(): bool
-    {
-        return $this->mutable;
-    }
-
-    public function getLockable(): bool
-    {
-        return $this->lockable;
-    }
-
-    public function getLocked(): bool
-    {
-        return $this->locked;
-    }
-
-    public function getRevealed(): bool
-    {
-        return $this->revealed;
-    }
-
-    public function getTags(): array
-    {
-        return $this->tags;
-    }
-
-    public function getPhrases(): array
-    {
-        return $this->phrases;
-    }
-
-    public function getDescription(): array
-    {
-        return $this->description;
-    }
-
-    public function getText(): array
-    {
-        return $this->text;
-    }
-
     /**
      * Get the first value.
      * @param array $values
@@ -238,13 +123,13 @@ abstract class AbstractEntityAssignmentHydrator implements AssignmentHydratorInt
     }
 
     /**
-     * Get the first value as boolean.
+     * Join values into single string.
      * @param array $values
-     * @return bool
+     * @return string
      */
-    protected function boolValue(array $values): bool
+    protected function joinValues(array $values): string
     {
-        return $this->firstValue($values) === 'yes';
+        return implode('', $values);
     }
 
     /**
@@ -258,13 +143,13 @@ abstract class AbstractEntityAssignmentHydrator implements AssignmentHydratorInt
     }
 
     /**
-     * Join values into single string.
+     * Get the first value as boolean.
      * @param array $values
-     * @return string
+     * @return bool
      */
-    protected function joinValues(array $values): string
+    protected function boolValue(array $values): bool
     {
-        return implode('', $values);
+        return $this->firstValue($values) === 'yes';
     }
 
     /**
@@ -300,5 +185,120 @@ abstract class AbstractEntityAssignmentHydrator implements AssignmentHydratorInt
         }
 
         return $lines;
+    }
+
+    public function getAccessible(): bool
+    {
+        return $this->accessible;
+    }
+
+    public function getAcquirable(): bool
+    {
+        return $this->acquirable;
+    }
+
+    public function getActivatable(): bool
+    {
+        return $this->activatable;
+    }
+
+    public function getCapacity(): int
+    {
+        return $this->capacity;
+    }
+
+    public function getDeactivatable(): bool
+    {
+        return $this->deactivatable;
+    }
+
+    public function getDescription(): array
+    {
+        return $this->description;
+    }
+
+    public function getDestination(): string
+    {
+        return $this->destination;
+    }
+
+    public function getDirection(): string
+    {
+        return $this->direction;
+    }
+
+    public function getDiscoverable(): bool
+    {
+        return $this->discoverable;
+    }
+
+    public function getExits(): array
+    {
+        return $this->exits;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function getItems(): array
+    {
+        return $this->items;
+    }
+
+    public function getKey(): string
+    {
+        return $this->key;
+    }
+
+    public function getLockable(): bool
+    {
+        return $this->lockable;
+    }
+
+    public function getLocked(): bool
+    {
+        return $this->locked;
+    }
+
+    public function getMutable(): bool
+    {
+        return $this->mutable;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getPhrases(): array
+    {
+        return $this->phrases;
+    }
+
+    public function getReadable(): bool
+    {
+        return $this->readable;
+    }
+
+    public function getRevealed(): bool
+    {
+        return $this->revealed;
+    }
+
+    public function getSize(): int
+    {
+        return $this->size;
+    }
+
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
+
+    public function getText(): array
+    {
+        return $this->text;
     }
 }

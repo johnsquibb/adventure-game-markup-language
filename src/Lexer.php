@@ -4,7 +4,6 @@ namespace AdventureGameMarkupLanguage;
 
 use AdventureGameMarkupLanguage\Syntax\AbstractSyntax;
 use AdventureGameMarkupLanguage\Syntax\Assignment;
-use AdventureGameMarkupLanguage\Syntax\Comment;
 use AdventureGameMarkupLanguage\Syntax\Identifier;
 use AdventureGameMarkupLanguage\Syntax\ListAssignment;
 use AdventureGameMarkupLanguage\Syntax\MultilineAssignment;
@@ -16,68 +15,6 @@ use AdventureGameMarkupLanguage\Syntax\Type;
  */
 class Lexer
 {
-    /**
-     * Runs lexical analysis on string sequence and returns list of tokens.
-     * @param string $sequence
-     * @return array
-     */
-    public function tokenize(string $sequence): array
-    {
-        $lexemes = $this->scan($sequence);
-        return $this->evaluate($lexemes);
-    }
-
-    /**
-     * Scans string sequence for lexemes and returns the list.
-     * @param string $sequence
-     * @return array
-     */
-    public function scan(string $sequence): array
-    {
-        $sequence = trim($sequence);
-        if (empty($sequence)) {
-            return [];
-        }
-
-        $lines = explode("\n", $sequence);
-        if (empty($lines)) {
-            return [];
-        }
-
-        $lexemes = [];
-
-        foreach ($lines as $line) {
-            array_push(
-                $lexemes,
-                ...preg_split(
-                    "/(\\\)|(,)|(#)|(\[)|(])|(=)|(\s)/",
-                    trim($line),
-                    -1,
-                    PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY
-                )
-            );
-            $lexemes[] = AbstractSyntax::TOKEN_NEWLINE;
-        }
-
-        return $lexemes;
-    }
-
-    /**
-     * Evaluates list of lexemes and returns list of matching symbols.
-     * @param array $lexemes
-     * @return array
-     */
-    public function evaluate(array $lexemes): array
-    {
-        $analyzed = [];
-
-        foreach ($lexemes as $lexeme) {
-            array_push($analyzed, ...$this->analyzeLexeme($lexeme));
-        }
-
-        return $analyzed;
-    }
-
     /**
      * Create the syntax tree from the tokens.
      * @param array $tokens
@@ -134,18 +71,6 @@ class Lexer
                     }
 
                     $tree->addNode($node);
-                    break;
-                case Symbols::HASH:
-                    $index++;
-                    $identifiers = [];
-                    while ($this->peekToken($index, $tokens) === Symbols::IDENTIFIER) {
-                        $index++;
-                        $identifiers[] = $tokens[$index];
-                        $index++;
-                    }
-                    $node = new Comment($identifiers);
-                    $tree->addNode($node);
-                    $index++;
                     break;
                 case Symbols::LEFT_BRACKET:
                     $index++;
@@ -208,19 +133,20 @@ class Lexer
      */
     private function preprocessTokens(array $tokens): array
     {
-        $tokens = $this->convertSpacesToIdentifiers($tokens);
+        $tokens = $this->convertTokensToIdentifiers($tokens);
 
         $index = 0;
         while ($index < count($tokens)) {
             switch ($tokens[$index]) {
                 case Symbols::ESCAPE:
                     $literal = match ($tokens[$index + 1]) {
-                        Symbols::HASH => AbstractSyntax::TOKEN_COMMENT,
                         Symbols::EQUALS => AbstractSyntax::TOKEN_ASSIGNMENT,
                         Symbols::LEFT_BRACKET => AbstractSyntax::TOKEN_TYPE_OPEN,
                         Symbols::RIGHT_BRACKET => AbstractSyntax::TOKEN_TYPE_CLOSE,
                         Symbols::COMMA => AbstractSyntax::TOKEN_DELIMITER,
                         Symbols::ESCAPE => AbstractSyntax::TOKEN_ESCAPE,
+                        Symbols::HASH => AbstractSyntax::TOKEN_COMMENT,
+                        default => AbstractSyntax::TOKEN_NOTHING,
                     };
 
                     // Convert the current token to its own identifier.
@@ -237,11 +163,11 @@ class Lexer
     }
 
     /**
-     * Convert preserved whitespace to string identifiers.
+     * Convert special tokens to identifiers.
      * @param array $tokens
      * @return array
      */
-    private function convertSpacesToIdentifiers(array $tokens): array
+    private function convertTokensToIdentifiers(array $tokens): array
     {
         $converted = [];
 
@@ -251,6 +177,10 @@ class Lexer
                 case Symbols::SPACE:
                     $converted[] = Symbols::IDENTIFIER;
                     $converted[] = AbstractSyntax::TOKEN_SPACE;
+                    break;
+                case Symbols::HASH:
+                    $converted[] = Symbols::IDENTIFIER;
+                    $converted[] = AbstractSyntax::TOKEN_COMMENT;
                     break;
                 default:
                     $converted[] = $tokens[$index];
@@ -275,6 +205,72 @@ class Lexer
         }
 
         return AbstractSyntax::TOKEN_NOTHING;
+    }
+
+    /**
+     * Runs lexical analysis on string sequence and returns list of tokens.
+     * @param string $sequence
+     * @return array
+     */
+    public function tokenize(string $sequence): array
+    {
+        $lexemes = $this->scan($sequence);
+        return $this->evaluate($lexemes);
+    }
+
+    /**
+     * Scans string sequence for lexemes and returns the list.
+     * @param string $sequence
+     * @return array
+     */
+    public function scan(string $sequence): array
+    {
+        $sequence = trim($sequence);
+        if (empty($sequence)) {
+            return [];
+        }
+
+        $lines = explode("\n", $sequence);
+        if (empty($lines)) {
+            return [];
+        }
+
+        $lexemes = [];
+
+        foreach ($lines as $line) {
+            $symbols = preg_split(
+                "/(\\\)|(,)|(#)|(\[)|(])|(=)|(\s)/",
+                trim($line),
+                -1,
+                PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY
+            );
+
+            // Sometimes, it feels like the parser is ignoring all my comments.
+            if (isset($symbols[0]) && $symbols[0] === AbstractSyntax::TOKEN_COMMENT) {
+                continue;
+            }
+
+            array_push($lexemes, ...$symbols);
+            $lexemes[] = AbstractSyntax::TOKEN_NEWLINE;
+        }
+
+        return $lexemes;
+    }
+
+    /**
+     * Evaluates list of lexemes and returns list of matching symbols.
+     * @param array $lexemes
+     * @return array
+     */
+    public function evaluate(array $lexemes): array
+    {
+        $analyzed = [];
+
+        foreach ($lexemes as $lexeme) {
+            array_push($analyzed, ...$this->analyzeLexeme($lexeme));
+        }
+
+        return $analyzed;
     }
 
     /**

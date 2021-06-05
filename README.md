@@ -1,19 +1,25 @@
-# adventure-game-markup-language
+# Adventure Game Markup Language
 
-Transpiles Adventure Game Markup Language (AGML) into hydrator objects for use in building games
-that utilize the [Adventure Game Framework](https://github.com/johnsquibb/adventure-game-framework).
+A set of utilities for working with Adventure Game Markup Language (AGML) to build games for
+the [Adventure Game Framework](https://github.com/johnsquibb/adventure-game-framework).
 
-## Example
+## Key Features
 
-The following snippet demonstrates the use of the common AGML components: types, comments, literals,
+- Defines and documents AGML syntax.
+- Provides sample code for transpiling AGML into hydrator objects that can be used with the
+  framework.
+
+## AGML Syntax
+
+The following snippet is valid AGML and demonstrates the use of: types, comments, literals,
 identifiers, assignments, list assignments, and multiline text assignments.
 
-```
+```AGML
 # Type Declaration.
 # Types must be UPPERCASE.
 [ITEM]
 
-# Anything following a '#' charcter is ignored.
+# Any line beginning with '#' will be ignored.
 # This is a comment
 
 # An assignment.
@@ -33,23 +39,30 @@ tags=flashlight,light,magic torch stick
 # Multiline assignment. Variable name in brackets must be lowercase.
 # Any number of lines may follow, and the parser will continue until reaching a new instruction.
 [description]
-Line 1
-Line 2
-Line 3
-...
+Description #1
+Description #2              
+Description #3              
+# ...
 
 # Another multi-line assignment
 [text]
-Line 1
-Line 2
-Line 3
-...
+Text #1
+Text #2
+Text #3
+# ...
 
-# To use special characters, escape them with '\'.
-
+# To use reserved symbols in assignments, escape them with Backslash.
+# Examples:
+#             \,
+#             \\
+#             \=
+#             \[
+#             \]
 ```
 
-The following PHP code snippet demonstrates transpiler usage:
+## Using the Transpiler
+
+The following PHP code snippet demonstrates transpiler usage.
 
 ```php 
 $markup = <<<END
@@ -88,7 +101,3 @@ $transpiler = new Transpiler($lexer, $parser);
 
 $hydrators = $transpiler->transpile($markup);
 ```
-
-## Specification
-
-See [AGML Specification](docs/AGML%20spec.txt)

@@ -89,8 +89,10 @@ class Parser
      * @param AssignmentHydratorInterface $hydrator
      * @param Assignment $assignment
      */
-    private function parseAssignment(AssignmentHydratorInterface $hydrator, Assignment $assignment): void
-    {
+    private function parseAssignment(
+        AssignmentHydratorInterface $hydrator,
+        Assignment $assignment
+    ): void {
         $hydrator->assign($assignment->getVariable(), $assignment->getValues());
     }
 

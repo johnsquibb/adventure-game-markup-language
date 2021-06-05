@@ -4,7 +4,6 @@ namespace AdventureGameMarkupLanguage;
 
 use AdventureGameMarkupLanguage\Syntax\AbstractSyntax;
 use AdventureGameMarkupLanguage\Syntax\Assignment;
-use AdventureGameMarkupLanguage\Syntax\Comment;
 use AdventureGameMarkupLanguage\Syntax\Identifier;
 use AdventureGameMarkupLanguage\Syntax\ListAssignment;
 use AdventureGameMarkupLanguage\Syntax\MultilineAssignment;
@@ -93,20 +92,6 @@ class LexerTest extends TestCase
                 'c',
                 '=',
                 '3',
-                AbstractSyntax::TOKEN_NEWLINE
-            ],
-            $lexemes
-        );
-
-        $sequence = '# comment format';
-        $lexemes = $lexer->scan($sequence);
-        $this->assertEquals(
-            [
-                '#',
-                AbstractSyntax::TOKEN_SPACE,
-                'comment',
-                AbstractSyntax::TOKEN_SPACE,
-                'format',
                 AbstractSyntax::TOKEN_NEWLINE
             ],
             $lexemes
@@ -259,6 +244,16 @@ class LexerTest extends TestCase
             $evaluated
         );
 
+        $evaluated = $lexer->evaluate(['\\', '@']);
+        $this->assertEquals(
+            [
+                Symbols::ESCAPE,
+                Symbols::IDENTIFIER,
+                '@',
+            ],
+            $evaluated
+        );
+
         $evaluated = $lexer->evaluate(['#', 'comment']);
         $this->assertEquals(
             [
@@ -312,13 +307,6 @@ class LexerTest extends TestCase
             Symbols::RIGHT_BRACKET,
             Symbols::NEWLINE,
 
-            // # Attributes
-            Symbols::HASH,
-            Symbols::SPACE,
-            Symbols::IDENTIFIER,
-            'Attributes',
-            Symbols::NEWLINE,
-
             // id=flashlight
             Symbols::IDENTIFIER,
             'id',
@@ -362,13 +350,6 @@ class LexerTest extends TestCase
             // Blank line
             Symbols::NEWLINE,
 
-            // # Interactions
-            Symbols::HASH,
-            Symbols::SPACE,
-            Symbols::IDENTIFIER,
-            'Interactions',
-            Symbols::NEWLINE,
-
             // acquirable=yes
             Symbols::IDENTIFIER,
             'acquirable',
@@ -394,13 +375,6 @@ class LexerTest extends TestCase
             Symbols::NEWLINE,
 
             // Blank line
-            Symbols::NEWLINE,
-
-            // # Tags
-            Symbols::HASH,
-            Symbols::SPACE,
-            Symbols::IDENTIFIER,
-            'Tags',
             Symbols::NEWLINE,
 
             // tags=flashlight,light,magic torch stick
@@ -451,71 +425,9 @@ class LexerTest extends TestCase
         $this->assertInstanceOf(Identifier::class, $nodes[2]);
     }
 
-    public function testCreateSyntaxTreeFromComment()
-    {
-        $lexer = new Lexer();
-
-        $tokens = [
-            Symbols::HASH,
-            Symbols::IDENTIFIER,
-            'this',
-            Symbols::IDENTIFIER,
-            'is',
-            Symbols::IDENTIFIER,
-            'a',
-            Symbols::IDENTIFIER,
-            'comment',
-        ];
-
-        $tree = $lexer->createSyntaxTree($tokens);
-        $nodes = $tree->getNodes();
-        $this->assertCount(1, $nodes);
-        $this->assertInstanceOf(Comment::class, $nodes[0]);
-        $this->assertEquals(['this', 'is', 'a', 'comment'], $nodes[0]->getIdentifiers());
-    }
-
     public function testCreateSyntaxTreeFromEscapes()
     {
         $lexer = new Lexer();
-
-        // Escaped comment
-        $tokens = [
-            Symbols::ESCAPE,
-            Symbols::HASH,
-            Symbols::IDENTIFIER,
-            'this',
-            Symbols::IDENTIFIER,
-            'is',
-            Symbols::IDENTIFIER,
-            'not',
-            Symbols::IDENTIFIER,
-            'a',
-            Symbols::IDENTIFIER,
-            'comment',
-        ];
-
-        $tree = $lexer->createSyntaxTree($tokens);
-        $nodes = $tree->getNodes();
-
-        $this->assertCount(6, $nodes);
-
-        $this->assertInstanceOf(Identifier::class, $nodes[0]);
-        $this->assertEquals('#', $nodes[0]->getValue());
-
-        $this->assertInstanceOf(Identifier::class, $nodes[1]);
-        $this->assertEquals('this', $nodes[1]->getValue());
-
-        $this->assertInstanceOf(Identifier::class, $nodes[2]);
-        $this->assertEquals('is', $nodes[2]->getValue());
-
-        $this->assertInstanceOf(Identifier::class, $nodes[3]);
-        $this->assertEquals('not', $nodes[3]->getValue());
-
-        $this->assertInstanceOf(Identifier::class, $nodes[4]);
-        $this->assertEquals('a', $nodes[4]->getValue());
-
-        $this->assertInstanceOf(Identifier::class, $nodes[5]);
-        $this->assertEquals('comment', $nodes[5]->getValue());
 
         // Escaped type
         $tokens = [

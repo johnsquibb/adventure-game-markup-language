@@ -12,24 +12,6 @@ class MultilineAssignment extends AbstractSyntax
     {
     }
 
-    /**
-     * Get the lines.
-     * @return array
-     */
-    public function getLines(): array
-    {
-        return $this->lines;
-    }
-
-    /**
-     * Get the section value.
-     * @return string
-     */
-    public function getSection(): string
-    {
-        return $this->section;
-    }
-
     public function toString(): string
     {
         $lines = [];
@@ -42,5 +24,23 @@ class MultilineAssignment extends AbstractSyntax
         }
 
         return implode("\n", $lines);
+    }
+
+    /**
+     * Get the section value.
+     * @return string
+     */
+    public function getSection(): string
+    {
+        return $this->section;
+    }
+
+    /**
+     * Get the lines.
+     * @return array
+     */
+    public function getLines(): array
+    {
+        return $this->lines;
     }
 }

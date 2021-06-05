@@ -8,13 +8,13 @@ namespace AdventureGameMarkupLanguage;
  */
 final class Symbols
 {
-    public const IDENTIFIER = 'IDENTIFIER';
-    public const EQUALS = 'EQUALS';
-    public const LEFT_BRACKET = 'LEFT_BRACKET';
-    public const RIGHT_BRACKET = 'RIGHT_BRACKET';
-    public const HASH = 'HASH';
     public const COMMA = 'COMMA';
+    public const EQUALS = 'EQUALS';
     public const ESCAPE = 'ESCAPE';
+    public const HASH = 'HASH';
+    public const IDENTIFIER = 'IDENTIFIER';
+    public const LEFT_BRACKET = 'LEFT_BRACKET';
     public const NEWLINE = 'NEWLINE';
+    public const RIGHT_BRACKET = 'RIGHT_BRACKET';
     public const SPACE = 'SPACE';
 }

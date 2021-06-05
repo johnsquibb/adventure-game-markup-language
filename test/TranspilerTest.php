@@ -36,7 +36,7 @@ class TranspilerTest extends TestCase
         Information written on the side:
         Model: Illuminated Devices Inc
         Year: 1983
-        Serial Number: \#8301IDI001256703\\\B
+        Serial Number: #8301IDI001256703\\\B
         Batt. Type: (4) \[AA\]\,    Rechargeable\=yes
         
         [ITEM]
@@ -93,24 +93,5 @@ class TranspilerTest extends TestCase
 
         $this->assertInstanceOf(ContainerEntityHydrator::class, $hydrators[3]);
         $this->assertEquals('theTreasureChest', $hydrators[3]->getId());
-    }
-
-    public function testTranspileEscapedTokens()
-    {
-        $fixture = <<<END
-        [ITEM]
-        name=\#The \#Name \#Contains \#Hashes
-        END;
-
-        $lexer = new Lexer();
-        $parser = new Parser();
-        $transpiler = new Transpiler($lexer, $parser);
-
-        $hydrators = $transpiler->transpile($fixture);
-
-        $this->assertCount(1, $hydrators);
-        $this->assertInstanceOf(ItemEntityHydrator::class, $hydrators[0]);
-
-        $this->assertEquals('#The #Name #Contains #Hashes', $hydrators[0]->getName());
     }
 }
