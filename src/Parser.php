@@ -5,9 +5,11 @@ namespace AdventureGameMarkupLanguage;
 use AdventureGameMarkupLanguage\Exception\InvalidTypeException;
 use AdventureGameMarkupLanguage\Hydrator\AssignmentHydratorInterface;
 use AdventureGameMarkupLanguage\Hydrator\ContainerEntityHydrator;
+use AdventureGameMarkupLanguage\Hydrator\EventEntityHydrator;
 use AdventureGameMarkupLanguage\Hydrator\ItemEntityHydrator;
 use AdventureGameMarkupLanguage\Hydrator\LocationEntityHydrator;
 use AdventureGameMarkupLanguage\Hydrator\PortalEntityHydrator;
+use AdventureGameMarkupLanguage\Hydrator\TriggerEntityHydrator;
 use AdventureGameMarkupLanguage\Syntax\Assignment;
 use AdventureGameMarkupLanguage\Syntax\ListAssignment;
 use AdventureGameMarkupLanguage\Syntax\MultilineAssignment;
@@ -80,6 +82,8 @@ class Parser
             Literals::TYPE_PORTAL => new PortalEntityHydrator(),
             Literals::TYPE_CONTAINER => new ContainerEntityHydrator(),
             Literals::TYPE_LOCATION => new LocationEntityHydrator(),
+            Literals::TYPE_TRIGGER => new TriggerEntityHydrator(),
+            Literals::TYPE_EVENT => new EventEntityHydrator(),
             default => throw new InvalidTypeException("Invalid type: $identifier"),
         };
     }

@@ -2,16 +2,30 @@
 
 namespace AdventureGameMarkupLanguage\Hydrator;
 
-class AbstractEventHydrator
+abstract class AbstractEventHydrator extends AbstractEntityAssignmentHydrator
 {
-    // Triggers
-    private array $activators = [];
-    private array $comparisons = [];
-    private string $portal = '';
-
-    // Events
+    private string $type = '';
     private string $trigger = '';
-    private string $item = '';
-    private string $location = '';
-    private int $uses = 0;
+
+    public function assign(string $variable, array $values): void
+    {
+        switch ($variable) {
+            case 'type':
+                $this->type = $this->firstValue($values);
+                break;
+            case 'trigger':
+                $this->trigger = $this->firstValue($values);
+                break;
+        }
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function getTrigger(): string
+    {
+        return $this->trigger;
+    }
 }

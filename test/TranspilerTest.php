@@ -3,8 +3,10 @@
 namespace AdventureGameMarkupLanguage;
 
 use AdventureGameMarkupLanguage\Hydrator\ContainerEntityHydrator;
+use AdventureGameMarkupLanguage\Hydrator\EventEntityHydrator;
 use AdventureGameMarkupLanguage\Hydrator\ItemEntityHydrator;
 use AdventureGameMarkupLanguage\Hydrator\LocationEntityHydrator;
+use AdventureGameMarkupLanguage\Hydrator\TriggerEntityHydrator;
 use PHPUnit\Framework\TestCase;
 
 class TranspilerTest extends TestCase
@@ -69,6 +71,19 @@ class TranspilerTest extends TestCase
         [description]
         A chest containing valuable items.
         It appears to be locked.
+        
+        [TRIGGER]
+        type=theTriggerType
+        uses=123
+        activators=one,two,three
+        comparisons=four,five,six
+        item=theItemId
+        location=theLocationId
+        portal=thePortalId
+        
+        [EVENT]
+        type=theEventType
+        trigger=theEventTrigger
         END;
 
         $lexer = new Lexer();
@@ -77,13 +92,19 @@ class TranspilerTest extends TestCase
 
         $hydrators = $transpiler->transpile($fixture);
 
-        $this->assertCount(4, $hydrators);
+        $this->assertCount(6, $hydrators);
 
         $this->assertInstanceOf(ItemEntityHydrator::class, $hydrators[0]);
         $this->assertEquals('flashlight', $hydrators[0]->getId());
         $this->assertCount(6, $hydrators[0]->getText());
-        $this->assertEquals("Serial Number: #8301IDI001256703\\B", $hydrators[0]->getText()[3]);
-        $this->assertEquals("Batt. Type: (4) [AA],    Rechargeable=yes", $hydrators[0]->getText()[4]);
+        $this->assertEquals(
+            "Serial Number: #8301IDI001256703\\B",
+            $hydrators[0]->getText()[3]
+        );
+        $this->assertEquals(
+            "Batt. Type: (4) [AA],    Rechargeable=yes",
+            $hydrators[0]->getText()[4]
+        );
 
         $this->assertInstanceOf(ItemEntityHydrator::class, $hydrators[1]);
         $this->assertEquals('keyToWoodenDoor', $hydrators[1]->getId());
@@ -93,5 +114,19 @@ class TranspilerTest extends TestCase
 
         $this->assertInstanceOf(ContainerEntityHydrator::class, $hydrators[3]);
         $this->assertEquals('theTreasureChest', $hydrators[3]->getId());
+
+        $this->assertInstanceOf(TriggerEntityHydrator::class, $hydrators[4]);
+        $this->assertEquals('theTriggerType', $hydrators[4]->getType());
+        $this->assertEquals(123, $hydrators[4]->getUses());
+        $this->assertEquals(['one', 'two', 'three'], $hydrators[4]->getActivators());
+        $this->assertEquals(['four', 'five', 'six'], $hydrators[4]->getComparisons());
+        $this->assertEquals('theItemId', $hydrators[4]->getItem());
+        $this->assertEquals('theLocationId', $hydrators[4]->getLocation());
+        $this->assertEquals('thePortalId', $hydrators[4]->getPortal());
+
+        $this->assertInstanceOf(EventEntityHydrator::class, $hydrators[5]);
+        $this->assertEquals('theEventType', $hydrators[5]->getType());
+        $this->assertEquals('theEventTrigger', $hydrators[5]->getTrigger());
+
     }
 }

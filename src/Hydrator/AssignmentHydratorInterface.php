@@ -2,7 +2,7 @@
 
 namespace AdventureGameMarkupLanguage\Hydrator;
 
-interface AssignmentHydratorInterface
+interface AssignmentHydratorInterface extends HydratorInterface
 {
     public function assign(string $variable, array $values): void;
 }

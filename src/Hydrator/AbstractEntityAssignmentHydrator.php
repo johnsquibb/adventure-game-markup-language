@@ -2,6 +2,8 @@
 
 namespace AdventureGameMarkupLanguage\Hydrator;
 
+use AdventureGameMarkupLanguage\Literals;
+
 abstract class AbstractEntityAssignmentHydrator implements AssignmentHydratorInterface
 {
     // Generic
@@ -149,7 +151,7 @@ abstract class AbstractEntityAssignmentHydrator implements AssignmentHydratorInt
      */
     protected function boolValue(array $values): bool
     {
-        return $this->firstValue($values) === 'yes';
+        return $this->firstValue($values) === Literals::BOOL_TRUE;
     }
 
     /**
