@@ -73,6 +73,7 @@ class TranspilerTest extends TestCase
         It appears to be locked.
         
         [TRIGGER]
+        id=theTriggerId
         type=theTriggerType
         uses=123
         activators=one,two,three
@@ -82,6 +83,7 @@ class TranspilerTest extends TestCase
         portal=thePortalId
         
         [EVENT]
+        id=theEventId
         type=theEventType
         trigger=theEventTrigger
         END;
@@ -116,6 +118,7 @@ class TranspilerTest extends TestCase
         $this->assertEquals('theTreasureChest', $hydrators[3]->getId());
 
         $this->assertInstanceOf(TriggerEntityHydrator::class, $hydrators[4]);
+        $this->assertEquals('theTriggerId', $hydrators[4]->getId());
         $this->assertEquals('theTriggerType', $hydrators[4]->getType());
         $this->assertEquals(123, $hydrators[4]->getUses());
         $this->assertEquals(['one', 'two', 'three'], $hydrators[4]->getActivators());
@@ -125,8 +128,8 @@ class TranspilerTest extends TestCase
         $this->assertEquals('thePortalId', $hydrators[4]->getPortal());
 
         $this->assertInstanceOf(EventEntityHydrator::class, $hydrators[5]);
+        $this->assertEquals('theEventId', $hydrators[5]->getId());
         $this->assertEquals('theEventType', $hydrators[5]->getType());
         $this->assertEquals('theEventTrigger', $hydrators[5]->getTrigger());
-
     }
 }

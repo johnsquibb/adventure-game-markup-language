@@ -16,6 +16,8 @@ abstract class AbstractEventHydrator extends AbstractEntityAssignmentHydrator
             case 'trigger':
                 $this->trigger = $this->firstValue($values);
                 break;
+            default:
+                parent::assign($variable, $values);
         }
     }
 

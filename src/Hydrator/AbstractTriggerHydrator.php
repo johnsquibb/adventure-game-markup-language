@@ -36,6 +36,8 @@ abstract class AbstractTriggerHydrator extends AbstractEntityAssignmentHydrator
             case 'portal':
                 $this->portal = $this->firstValue($values);
                 break;
+            default:
+                parent::assign($variable, $values);
         }
     }
 
