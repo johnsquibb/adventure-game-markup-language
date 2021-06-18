@@ -1,7 +1,9 @@
 <?php
 
-namespace AdventureGameMarkupLanguage;
+namespace AdventureGameMarkupLanguage\Test;
 
+use AdventureGameMarkupLanguage\Lexer;
+use AdventureGameMarkupLanguage\Symbols;
 use AdventureGameMarkupLanguage\Syntax\AbstractSyntax;
 use AdventureGameMarkupLanguage\Syntax\Assignment;
 use AdventureGameMarkupLanguage\Syntax\Identifier;

@@ -1,16 +1,18 @@
 <?php
 
-namespace AdventureGameMarkupLanguage;
+namespace AdventureGameMarkupLanguage\Test;
 
 use AdventureGameMarkupLanguage\Exception\InvalidTypeException;
 use AdventureGameMarkupLanguage\Hydrator\ContainerEntityHydrator;
 use AdventureGameMarkupLanguage\Hydrator\ItemEntityHydrator;
 use AdventureGameMarkupLanguage\Hydrator\LocationEntityHydrator;
 use AdventureGameMarkupLanguage\Hydrator\PortalEntityHydrator;
+use AdventureGameMarkupLanguage\Parser;
 use AdventureGameMarkupLanguage\Syntax\Assignment;
 use AdventureGameMarkupLanguage\Syntax\ListAssignment;
 use AdventureGameMarkupLanguage\Syntax\MultilineAssignment;
 use AdventureGameMarkupLanguage\Syntax\Type;
+use AdventureGameMarkupLanguage\SyntaxTree;
 use PHPUnit\Framework\TestCase;
 
 class ParserTest extends TestCase

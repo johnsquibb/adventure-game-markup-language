@@ -1,7 +1,8 @@
 <?php
 
-namespace AdventureGameMarkupLanguage\Syntax;
+namespace AdventureGameMarkupLanguage\Test\Syntax;
 
+use AdventureGameMarkupLanguage\Syntax\Type;
 use PHPUnit\Framework\TestCase;
 
 class TypeTest extends TestCase

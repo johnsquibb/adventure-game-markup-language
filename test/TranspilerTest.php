@@ -1,12 +1,15 @@
 <?php
 
-namespace AdventureGameMarkupLanguage;
+namespace AdventureGameMarkupLanguage\Test;
 
 use AdventureGameMarkupLanguage\Hydrator\ContainerEntityHydrator;
 use AdventureGameMarkupLanguage\Hydrator\EventEntityHydrator;
 use AdventureGameMarkupLanguage\Hydrator\ItemEntityHydrator;
 use AdventureGameMarkupLanguage\Hydrator\LocationEntityHydrator;
 use AdventureGameMarkupLanguage\Hydrator\TriggerEntityHydrator;
+use AdventureGameMarkupLanguage\Lexer;
+use AdventureGameMarkupLanguage\Parser;
+use AdventureGameMarkupLanguage\Transpiler;
 use PHPUnit\Framework\TestCase;
 
 class TranspilerTest extends TestCase

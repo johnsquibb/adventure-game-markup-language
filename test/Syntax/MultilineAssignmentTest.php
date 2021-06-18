@@ -1,7 +1,8 @@
 <?php
 
-namespace AdventureGameMarkupLanguage\Syntax;
+namespace AdventureGameMarkupLanguage\Test\Syntax;
 
+use AdventureGameMarkupLanguage\Syntax\MultilineAssignment;
 use PHPUnit\Framework\TestCase;
 
 class MultilineAssignmentTest extends TestCase

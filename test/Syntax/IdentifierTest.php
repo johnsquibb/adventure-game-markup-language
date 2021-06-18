@@ -1,7 +1,8 @@
 <?php
 
-namespace AdventureGameMarkupLanguage\Syntax;
+namespace AdventureGameMarkupLanguage\Test\Syntax;
 
+use AdventureGameMarkupLanguage\Syntax\Identifier;
 use PHPUnit\Framework\TestCase;
 
 class IdentifierTest extends TestCase

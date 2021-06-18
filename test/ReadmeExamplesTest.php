@@ -1,7 +1,10 @@
 <?php
 
-namespace AdventureGameMarkupLanguage;
+namespace AdventureGameMarkupLanguage\Test;
 
+use AdventureGameMarkupLanguage\Lexer;
+use AdventureGameMarkupLanguage\Parser;
+use AdventureGameMarkupLanguage\Transpiler;
 use PHPUnit\Framework\TestCase;
 
 class ReadmeExamplesTest extends TestCase

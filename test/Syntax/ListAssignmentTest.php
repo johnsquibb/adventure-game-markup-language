@@ -1,7 +1,8 @@
 <?php
 
-namespace AdventureGameMarkupLanguage\Syntax;
+namespace AdventureGameMarkupLanguage\Test\Syntax;
 
+use AdventureGameMarkupLanguage\Syntax\ListAssignment;
 use PHPUnit\Framework\TestCase;
 
 class ListAssignmentTest extends TestCase
