@@ -1,7 +1,7 @@
 {
   "name": "johnsquibb/adventure-game-markup-language",
   "type": "project",
-  "description": "A parser for adventure-game-framework files",
+  "description": "A set of utilities for working with Adventure Game Markup Language (AGML) to build games for the Adventure Game Framework.",
   "license": "MIT",
   "require-dev": {
     "phpunit/phpunit": "^9"
