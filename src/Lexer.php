@@ -146,6 +146,7 @@ class Lexer
                         Symbols::COMMA => AbstractSyntax::TOKEN_DELIMITER,
                         Symbols::ESCAPE => AbstractSyntax::TOKEN_ESCAPE,
                         Symbols::HASH => AbstractSyntax::TOKEN_COMMENT,
+                        // no break
                         default => AbstractSyntax::TOKEN_NOTHING,
                     };
 

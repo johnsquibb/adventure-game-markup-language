@@ -29,13 +29,15 @@ class ParserTest extends TestCase
         $tags = new ListAssignment('tags', ['gum', 'pack of gum', 'the pack of gum']);
         $phrases = new ListAssignment('phrases', ['chew', 'bubble gum']);
         $description = new MultilineAssignment(
-            'description', [
+            'description',
+            [
             ['This', ' ', 'is', ' ', 'the', ' ', 'description.'],
             ['It', ' ', 'spans', ' ', 'multiple', ' ', 'lines.'],
         ]
         );
         $text = new MultilineAssignment(
-            'text', [
+            'text',
+            [
             ['This', ' ', 'is', ' ', 'readable', ' ', 'text.'],
             ['It', ' ', 'spans', ' ', 'multiple', ' ', 'lines.'],
         ]

@@ -123,5 +123,4 @@ class Parser
     ): void {
         $hydrator->assign($assignment->getSection(), $assignment->getLines());
     }
-
 }
